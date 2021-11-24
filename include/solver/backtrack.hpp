@@ -1,18 +1,20 @@
 #ifndef SOLVER_BACKTRACK_HPP
 #define SOLVER_BACKTRACK_HPP
 
+using namespace std;
+
+#include <vector>
+
 #include "solver/base.hpp"
 
-class Backtrack: virtual public SolverBase  {
+class Backtrack : SolverBase  {
+    
 public:
     // constructor
     Backtrack();
 
-    // destructor
-    ~Backtrack() override = default;
-
     // solver
-    void solve(int** board, bool (* callback)(int**)) override;
+    void solve(vector<vector<int>> board, bool (* callback)(vector<vector<int>>)) override;
 };
 
-#endif
+#endif // SOLVER_BACKTRACK_HPP

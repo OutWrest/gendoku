@@ -1,10 +1,25 @@
 #ifndef SOLVER_BASE_HPP
 #define SOLVER_BASE_HPP
 
+#include <vector>
+#include "rules/base.hpp"
+
+using namespace std;
+
 class SolverBase {
+    vector<RuleBase*> rules;
 public:
-    virtual ~SolverBase() = default;
-    virtual void solve(int** board, bool (* callback)(int**)) = 0;
+    // constructor
+    SolverBase();
+    
+    // destructor
+    ~SolverBase();
+
+    // add rule
+    virtual void addRule(const RuleBase& rule) = 0;
+
+    // solve
+    virtual void solve(vector<vector<int>> board, bool (* callback)(vector<vector<int>>)) = 0;
 };
 
-#endif
+#endif // SOLVER_BASE_HPP

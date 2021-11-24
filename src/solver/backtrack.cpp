@@ -2,14 +2,12 @@
 
 Backtrack::Backtrack() {
     // constructor
-
+    // initialize the rule-set
+    
 }
 
-Backtrack::~Backtrack() {
-    // destructor
-}
-
-void Backtrack::solve(int** board, bool (* callback)(int**)) {
+void Backtrack::solve(vector<vector<int>> board, bool (* callback)(vector<vector<int>>)) {
     // solver
     // todo
     return;
+}
