@@ -7,14 +7,16 @@ using namespace std;
 
 #include "solver/base.hpp"
 
-class Backtrack : SolverBase  {
-    
+class Backtrack : public SolverBase  {
 public:
-    // constructor
-    Backtrack();
+    // constructor, use parent
+    Backtrack(const int num_of_solutions);
+
+    // add rule
+    void addRule(RuleBase& rule);
 
     // solver
-    void solve(vector<vector<int>> board, bool (* callback)(vector<vector<int>>)) override;
+    void solve(vector<vector<int>> board, void (* callback)(vector<vector<int>>)) override;
 };
 
 #endif // SOLVER_BACKTRACK_HPP

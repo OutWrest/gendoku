@@ -7,19 +7,22 @@
 using namespace std;
 
 class SolverBase {
-    vector<RuleBase*> rules;
 public:
+    vector<RuleBase*> rules;
+    int num_of_solutions;
+    int num_of_solutions_found;
+
     // constructor
-    SolverBase();
-    
+    SolverBase(const int num_of_solutions);
+
     // destructor
     ~SolverBase();
 
     // add rule
-    virtual void addRule(const RuleBase& rule) = 0;
+    void addRule(RuleBase& rule);
 
     // solve
-    virtual void solve(vector<vector<int>> board, bool (* callback)(vector<vector<int>>)) = 0;
+    virtual void solve(vector<vector<int>> board, void (* callback)(vector<vector<int>>)) = 0;
 };
 
 #endif // SOLVER_BASE_HPP
