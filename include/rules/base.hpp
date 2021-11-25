@@ -13,6 +13,9 @@ public:
     // default destructor
     ~RuleBase();
 
+    // get the rule name
+    virtual char* get_name();
+
     // is in row
     bool is_in_row(const vector<vector<int>> board, const int row, const int number);
 
@@ -26,7 +29,7 @@ public:
     vector<int> get_possible_vanilla(vector<vector<int>> board, const int row, const int col);
 
     // get possible values (override)
-    vector<int> get_possible(vector<vector<int>> board, const int row, const int col);
+    virtual vector<int> get_possible(vector<vector<int>> board, const int row, const int col);
 };
 
 #endif // RULES_BASE_HPP

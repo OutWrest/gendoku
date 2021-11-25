@@ -6,6 +6,10 @@ RuleBase::RuleBase() {
 RuleBase::~RuleBase() {
 }
 
+char* RuleBase::get_name() {
+    return "Base ruleset";
+}
+
 bool RuleBase::is_in_row(const vector<vector<int>> board, const int row, const int number) {
     for (int k = 0; k < board[row].size(); k++) {
         if (board[row][k] == number) {

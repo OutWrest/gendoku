@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void callback(vector<vector<int>> board) {
+void print_board(vector<vector<int>> board) {
     // print the board
     for (int i = 0; i < board.size(); i++) {
         for (int j = 0; j < board[i].size(); j++) {
@@ -87,6 +87,12 @@ int main(int argc, char *argv[]) {
     double time_taken = difftime(time(0), start);
 
     printf("%d solutions found in %f seconds.\n", solver.get_num_of_solutions(), time_taken);
+
+    vector<int> a = ar.get_possible(board, 0, 0);
+    
+    // for (int i = 0; i < a.size(); i++) {
+    //     cout << a[i] << " ";
+    // }
 
     return 0;
 }

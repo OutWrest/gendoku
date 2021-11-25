@@ -20,6 +20,7 @@ SolverBase::~SolverBase() {
 
 void SolverBase::add_rule(RuleBase& rule) {
     rules.push_back(&rule);
+    cout << "Rule added: " << rule.get_name() << endl;
 }
 
 bool SolverBase::is_solved(vector<vector<int>> board) {
