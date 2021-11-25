@@ -26,7 +26,7 @@ public:
     vector<int> get_possible_vanilla(vector<vector<int>> board, const int row, const int col);
 
     // get possible values (override)
-    vector<int> get_possbile(vector<vector<int>> board, const int row, const int col);
+    vector<int> get_possible(vector<vector<int>> board, const int row, const int col);
 };
 
 #endif // RULES_BASE_HPP

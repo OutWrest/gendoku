@@ -15,12 +15,10 @@ SolverBase::SolverBase(const int num_of_solutions) {
 
 // destructor
 SolverBase::~SolverBase() {
-    for (RuleBase* rule : rules) {
-        delete rule;
-    }
+    delete rules[0];
 }
 
-void SolverBase::addRule(RuleBase& rule) {
+void SolverBase::add_rule(RuleBase& rule) {
     rules.push_back(&rule);
 }
 
@@ -39,42 +37,54 @@ bool SolverBase::is_solved(vector<vector<int>> board) {
 
 vector<int> SolverBase::get_possible_numbers(const vector<vector<int>> board, const int i, const int j) {
     // check if the cell is empty
-    set<int> possible_numbers_set;
-    set<int> tmp;
-    vector<int> tmp_v;
+    set<int> prev_set;
+    vector<int> prev_vec;
 
+    set<int> next_set;
+    vector<int> next_vec;
+    
     vector<int> possible_numbers;
 
     if (board[i][j] == 0) {
         for (RuleBase* rule : rules) {
-            // if possible_numbers is empty, then add all possible numbers
-            tmp_v = rule->get_possbile(board, i, j);
+            // keep track of the previous set and only keep numbers that are in both sets
+            if (prev_set.empty())
+            {
+                // first set
+                prev_vec = rule->get_possible(board, i, j);
 
-            if (possible_numbers_set.empty()) {
-                for (int k : tmp_v) {
-                    possible_numbers_set.insert(k);
+                for (int num : prev_vec) {
+                    prev_set.insert(num);
                 }
-            } else {
-                // if possible_numbers is not empty, then intersect the two sets
-                for (int k : tmp_v) {
-                    tmp.insert(k);
-                }
+            }
+            else {
+                // next set
+                next_vec = rule->get_possible(board, i, j);
 
-                for (int k : possible_numbers_set) {
-                    if (tmp.find(k) != tmp.end()) {
-                        possible_numbers_set.insert(k);
+                for (int num : next_vec) {
+                    // if num in prev_set, add to next_set
+                    if (prev_set.find(num) != prev_set.end()) {
+                        next_set.insert(num);
                     }
                 }
 
-                tmp.clear();
+                // update prev_set
+                prev_set = next_set;
+
+                next_set.clear();
+                next_vec.clear();
             }
         }
     }
 
     // convert set to vector
-    for (int k : possible_numbers_set) {
+    for (int k : prev_set) {
         possible_numbers.push_back(k);
     }
 
     return possible_numbers;
+}
+
+int SolverBase::get_num_of_solutions() {
+    return this->num_of_solutions_found;
 }

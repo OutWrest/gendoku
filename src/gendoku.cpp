@@ -1,8 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <time.h>
 
 #include "solver/backtrack.hpp"
 #include "io/file.hpp"
+
+#include "rules/knight.hpp"
+#include "rules/adjacent.hpp"
 
 using namespace std;
 
@@ -55,22 +59,34 @@ int main(int argc, char *argv[]) {
     // }
 
     // create a new solver
-    Backtrack solver(1);
     FileIO fileio("output.txt");
+
+    time_t start = time(0);
+    Backtrack solver(1);
     
     vector<vector<int>> board {
-        {5, 3, 0, 0, 7, 0, 0, 0, 0},
-        {6, 0, 0, 1, 9, 5, 0, 0, 0},
-        {0, 9, 8, 0, 0, 0, 0, 6, 0},
-        {8, 0, 0, 0, 6, 0, 0, 0, 3},
-        {4, 0, 0, 8, 0, 3, 0, 0, 1},
-        {7, 0, 0, 0, 2, 0, 0, 0, 6},
-        {0, 6, 0, 0, 0, 0, 2, 8, 0},
-        {0, 0, 0, 4, 1, 9, 0, 0, 5},
-        {0, 0, 0, 0, 8, 0, 0, 7, 9}
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
     };
 
+    KnightRule kr;
+    AdjacentRule ar;
+
+    solver.add_rule(kr);
+    solver.add_rule(ar);
+
     solver.solve(board, &fileio);
+
+    double time_taken = difftime(time(0), start);
+
+    printf("%d solutions found in %f seconds.\n", solver.get_num_of_solutions(), time_taken);
 
     return 0;
 }

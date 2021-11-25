@@ -57,6 +57,6 @@ vector<int> RuleBase::get_possible_vanilla(const vector<vector<int>> board, cons
     return possible_numbers;
 }
 
-vector<int> RuleBase::get_possbile(const vector<vector<int>> board, const int row, const int col) {
+vector<int> RuleBase::get_possible(const vector<vector<int>> board, const int row, const int col) {
     return get_possible_vanilla(board, row, col);
 }

@@ -21,13 +21,15 @@ public:
     ~SolverBase();
 
     // add rule
-    void addRule(RuleBase& rule);
+    void add_rule(RuleBase& rule);
 
     // is solved
     bool is_solved(vector<vector<int>> board);
 
     // get all possible numbers for a cell using the rules
     vector<int> get_possible_numbers(vector<vector<int>> board, int i, int j);
+
+    int get_num_of_solutions();
 
     // solve
     virtual void solve(vector<vector<int>> board, FileIO* fileio) = 0;
