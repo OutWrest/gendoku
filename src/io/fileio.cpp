@@ -20,18 +20,11 @@ FileIO::FileIO(const char* filename) {
 }
 
 FileIO::~FileIO() {
-    // if file is open, close it
-    if (file != NULL) {
-        fclose(file);
-    }
-
-    // delete filename
-    delete filename;
 }
 
 void FileIO::write(const vector<vector<int>> board) {
-    // open file
-    file = fopen(filename, "w");
+    // append to file
+    file = fopen(filename, "a");
 
     // write board to file
     for (int i = 0; i < board.size(); i++) {

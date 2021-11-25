@@ -4,7 +4,6 @@
 using namespace std;
 
 #include <vector>
-
 #include "solver/base.hpp"
 
 class Backtrack : public SolverBase  {
@@ -16,7 +15,7 @@ public:
     void addRule(RuleBase& rule);
 
     // solver
-    void solve(vector<vector<int>> board, void (* callback)(vector<vector<int>>)) override;
+    void solve(vector<vector<int>> board, FileIO* fileio) override;
 };
 
 #endif // SOLVER_BACKTRACK_HPP

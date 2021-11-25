@@ -1,10 +1,12 @@
 #ifndef SOLVER_BASE_HPP
 #define SOLVER_BASE_HPP
 
-#include <vector>
-#include "rules/base.hpp"
-
 using namespace std;
+
+#include <vector>
+
+#include "rules/base.hpp"
+#include "io/file.hpp"
 
 class SolverBase {
 public:
@@ -21,8 +23,14 @@ public:
     // add rule
     void addRule(RuleBase& rule);
 
+    // is solved
+    bool is_solved(vector<vector<int>> board);
+
+    // get all possible numbers for a cell using the rules
+    vector<int> get_possible_numbers(vector<vector<int>> board, int i, int j);
+
     // solve
-    virtual void solve(vector<vector<int>> board, void (* callback)(vector<vector<int>>)) = 0;
+    virtual void solve(vector<vector<int>> board, FileIO* fileio) = 0;
 };
 
 #endif // SOLVER_BASE_HPP

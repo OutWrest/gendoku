@@ -13,8 +13,20 @@ public:
     // default destructor
     ~RuleBase();
 
+    // is in row
+    bool is_in_row(const vector<vector<int>> board, const int row, const int number);
+
+    // is in column
+    bool is_in_col(const vector<vector<int>> board, const int col, const int number);
+
+    // is in box
+    bool is_in_box(const vector<vector<int>> board, const int row, const int col, const int number);
+
     // get possible values for a cell using the board. returns a list of vectors
-    virtual vector<int> getPossible(vector<vector<int>> board, int row, int col) = 0;
+    vector<int> get_possible_vanilla(vector<vector<int>> board, const int row, const int col);
+
+    // get possible values (override)
+    vector<int> get_possbile(vector<vector<int>> board, const int row, const int col);
 };
 
 #endif // RULES_BASE_HPP
