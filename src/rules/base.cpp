@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "rules/base.hpp"
 
 RuleBase::RuleBase() {
@@ -25,6 +27,7 @@ bool RuleBase::is_in_col(const vector<vector<int>> board, const int col, const i
         if (board[k][col] == number) {
             return true;
         }
+        
     }
 
     return false;
