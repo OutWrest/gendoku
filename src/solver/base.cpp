@@ -20,6 +20,7 @@ SolverBase::~SolverBase() {
 
 void SolverBase::add_rule(RuleBase& rule) {
     rules.push_back(&rule);
+    cout << "Rule added: " << rule.get_name() << ". New size is " << rules.size() << endl;
 }
 
 bool SolverBase::is_solved(vector<vector<int>> board) {
@@ -44,11 +45,12 @@ vector<int> SolverBase::get_possible_numbers(const vector<vector<int>> board, co
     vector<int> next_vec;
     
     vector<int> possible_numbers;
+    int c = 0;
 
     if (board[i][j] == 0) {
         for (RuleBase* rule : rules) {
             // keep track of the previous set and only keep numbers that are in both sets
-            if (prev_set.empty())
+            if (c == 0)
             {
                 // first set
                 prev_vec = rule->get_possible(board, i, j);
@@ -74,6 +76,8 @@ vector<int> SolverBase::get_possible_numbers(const vector<vector<int>> board, co
                 next_set.clear();
                 next_vec.clear();
             }
+
+            c++;
         }
     }
 

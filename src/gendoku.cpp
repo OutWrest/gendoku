@@ -5,12 +5,13 @@
 #include "solver/backtrack.hpp"
 #include "io/file.hpp"
 
+#include "rules/base.hpp"
 #include "rules/knight.hpp"
 #include "rules/adjacent.hpp"
 
 using namespace std;
 
-void callback(vector<vector<int>> board) {
+void print_board(vector<vector<int>> board) {
     // print the board
     for (int i = 0; i < board.size(); i++) {
         for (int j = 0; j < board[i].size(); j++) {
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
     FileIO fileio("output.txt");
 
     time_t start = time(0);
-    Backtrack solver(1);
+    Backtrack solver(100);
     
     vector<vector<int>> board {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -73,11 +74,12 @@ int main(int argc, char *argv[]) {
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0}
     };
 
     KnightRule kr;
     AdjacentRule ar;
+    RuleBase br;
 
     solver.add_rule(kr);
     solver.add_rule(ar);
@@ -87,6 +89,26 @@ int main(int argc, char *argv[]) {
     double time_taken = difftime(time(0), start);
 
     printf("%d solutions found in %f seconds.\n", solver.get_num_of_solutions(), time_taken);
+
+    vector<int> a = solver.get_possible_numbers(board, 1, 8);
+    vector<int> b = ar.get_possible(board, 1, 0);
+    vector<int> c = kr.get_possible(board, 1, 0);
+    
+    for (int i = 0; i < a.size(); i++) {
+        cout << a[i] << " ";
+    }
+
+    // cout << endl;
+
+    // for (int i = 0; i < b.size(); i++) {
+    //     cout << b[i] << " ";
+    // }
+
+    // cout << endl;
+
+    // for (int i = 0; i < c.size(); i++) {
+    //     cout << c[i] << " ";
+    // }
 
     return 0;
 }

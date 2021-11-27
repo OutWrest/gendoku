@@ -15,11 +15,14 @@ public:
     // default destructor
     ~KnightRule();
 
+    // get the rule name
+    char* get_name() override;
+
     // is knight
     bool is_knight(const vector<vector<int>> board, const int row, const int col, const int number);
 
     // override get_possbile
-    vector<int> get_possible(const vector<vector<int>> board, const int row, const int col);
+    vector<int> get_possible(const vector<vector<int>> board, const int row, const int col) override;
 };
 
 #endif // RULES_KNIGHT_HPP

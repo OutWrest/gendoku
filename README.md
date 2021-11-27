@@ -5,6 +5,7 @@ With growing popularity, newer puzzles contain fewer and fewer clues and more we
 ### TODO
 - [ ] Add backtracking solver
     + Possible exploration of different solving strategies
+    - [ ] #1
 - [ ] Create a testing suite
 - [ ] Create modular rules
     + Rules can be added or removed each run

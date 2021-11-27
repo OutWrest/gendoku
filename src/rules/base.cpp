@@ -1,9 +1,15 @@
+#include <iostream>
+
 #include "rules/base.hpp"
 
 RuleBase::RuleBase() {
 }
 
 RuleBase::~RuleBase() {
+}
+
+char* RuleBase::get_name() {
+    return "Base ruleset";
 }
 
 bool RuleBase::is_in_row(const vector<vector<int>> board, const int row, const int number) {
@@ -21,6 +27,7 @@ bool RuleBase::is_in_col(const vector<vector<int>> board, const int col, const i
         if (board[k][col] == number) {
             return true;
         }
+        
     }
 
     return false;
