@@ -2,6 +2,7 @@ CXX ?= g++
 
 # path #
 SRC_PATH = src
+TESTS_PATH = tests
 BUILD_PATH = build
 BIN_PATH = $(BUILD_PATH)/bin
 
@@ -15,11 +16,14 @@ SRC_EXT = cpp
 # Find all source files in the source directory, sorted by
 # most recently modified
 SOURCES = $(shell find $(SRC_PATH) -name '*.$(SRC_EXT)' | sort -k 1nr | cut -f2-)
+TEST_SOURCES = $(shell find $(TESTS_PATH) -name '*.$(SRC_EXT)' | sort -k 1nr | cut -f2-)
 # Set the object file names, with the source directory stripped
 # from the path, and the build path prepended in its place
 OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
+TEST_OBJECTS = $(TEST_SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
 # Set the dependency files that will be used to add header dependencies
 DEPS = $(OBJECTS:.o=.d)
+TEST_DEPS = $(TEST_OBJECTS:.o=.d)
 
 # flags #
 COMPILE_FLAGS = -std=c++11 -Wall -Wextra -g
@@ -70,3 +74,4 @@ $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
 $(BUILD_PATH)/%.o: $(SRC_PATH)/%.$(SRC_EXT)
 	@echo "Compiling: $< -> $@"
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -MP -MMD -c $< -o $@
+
