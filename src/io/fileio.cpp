@@ -1,3 +1,6 @@
+#include <iostream>
+#include <string.h>
+
 #include "io/file.hpp"
 
 FileIO::FileIO(const char* filename) {
@@ -25,13 +28,13 @@ void FileIO::write(const int i,const vector<vector<int>> board) {
     }
 
     // write board to file
+    fprintf(file, "%d,", i);
     for (int i = 0; i < board.size(); i++) {
         for (int j = 0; j < board[i].size(); j++) {
-            fprintf(file, "%d,%d", i, board[i][j]);
+            fprintf(file, "%d", board[i][j]);
         }
     }
 
     // write new line
     fprintf(file, "\n");
 }
-

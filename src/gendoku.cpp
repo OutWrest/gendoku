@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <string.h>
 
 #include "solver/backtrack.hpp"
 #include "io/file.hpp"
@@ -15,100 +16,114 @@ void print_board(vector<vector<int>> board) {
     // print the board
     for (int i = 0; i < board.size(); i++) {
         for (int j = 0; j < board[i].size(); j++) {
-            cout << board[i][j] << " ";
+            printf("%d ", board[i][j]);
         }
-        cout << endl;
+        printf("\n");
     }
-    cout << endl;
+    printf("\n");
+}
+
+vector<vector<int>> read_board(const char* filename) {
+    vector<vector<int>> board;
+
+    // open file
+    FILE* file = fopen(filename, "r");
+
+    // read file
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        // split line
+        vector<int> row;
+        char* token = strtok(line, ",");
+
+        while (token != NULL) {
+            row.push_back(atoi(token));
+            token = strtok(NULL, ",");
+        }
+
+        // add row to board
+        board.push_back(row);
+    }
+
+    // close file
+    fclose(file);
+
+    return board;
 }
 
 int main(int argc, char *argv[]) {
-    // Usage ./gendoku <how many to generate, -1 for all> <output file> -r <rules file>
-    // Example ./gendoku -1 output.txt -r rules.txt
+    // Usage ./gendoku <how many to generate> <output file> -r <k|a|ka> -b (board.txt, optional)
+    // Example ./gendoku 1 output.txt -r ka -b board.txt
 
     // check if there are enough arguments
-    // if (argc < 3) {
-    //     printf("Usage ./gendoku <how many to generate, -1 for all> <output file> -r <rules file>\n");
-    //     printf("Example ./gendoku -1 output.txt -r rules.txt\n");
-    //     return 1;
-    // }
+    if (argc < 3) {
+        printf("Usage: ./gendoku <how many to generate, default = 0> <output file> -r <k|a|ka> -b <board to start with, optional>\n");
+        printf("Example: ./gendoku 1 output.txt -r ka -b board.txt\n");
+        return 0;
+    }
 
-    // // check if the output file exists
-    // static FILE *f = fopen(argv[2], "r");
+    // Parse board in txt file
+    vector<vector<int>> board;
 
-    // if (f != NULL) {
-    //     printf("Output file already exists.\n");
-    //     return 1;
-    // }
+    if (argc > 4 && strcmp(argv[3], "-b") == 0) {
+        board = read_board(argv[4]);
 
-    // check if the rules file exists
-    // f = fopen(argv[4], "r");
+        // check if board is valid
+        if (board.size() != 9 || board[0].size() != 9) {
+            printf("Board is not valid\n");
+            return 0;
+        }
 
-    // if (f == NULL) {
-    //     printf("Rules file does not exist.\n");
-    //     return 1;
-    // }
-
-    // check if the rules file is empty
-    // fseek(f, 0, SEEK_END);
-    // int size = ftell(f);
-    // fseek(f, 0, SEEK_SET);
-
-    // if (size == 0) {
-    //     printf("Rules file is empty.\n");
-    //     return 1;
-    // }
+        printf("Loaded board:\n");
+        print_board(board);
+    }
+    else {
+        board = {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+    }
 
     // create a new solver
-    FileIO fileio("output.txt");
+    FileIO fileio(argv[2]);
 
     time_t start = time(0);
-    Backtrack solver(100);
-    
-    vector<vector<int>> board {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
+    Backtrack solver(atoi(argv[1]));
 
-    KnightRule kr;
-    AdjacentRule ar;
-    RuleBase br;
+    // split the rules
+    if (argc > 4 && strcmp(argv[4], "-r") == 0) {
+        if (strcmp(argv[5], "k") == 0) {
+            KnightRule kr;
 
-    solver.add_rule(kr);
-    solver.add_rule(ar);
+            solver.add_rule(kr);
+        }
+        else if (strcmp(argv[5], "a") == 0) {
+            AdjacentRule ar;
 
+            solver.add_rule(ar);
+        }
+        else if (strcmp(argv[5], "ka") == 0) {
+            KnightRule kr;
+            AdjacentRule ar;
+
+            solver.add_rule(kr);
+            solver.add_rule(ar);
+        }
+    }
+
+    // solve the puzzle
     solver.solve(board, &fileio);
 
     double time_taken = difftime(time(0), start);
 
     printf("%d solutions found in %f seconds.\n", solver.get_num_of_solutions(), time_taken);
-
-    vector<int> a = solver.get_possible_numbers(board, 1, 8);
-    vector<int> b = ar.get_possible(board, 1, 0);
-    vector<int> c = kr.get_possible(board, 1, 0);
-    
-    for (int i = 0; i < a.size(); i++) {
-        cout << a[i] << " ";
-    }
-
-    // cout << endl;
-
-    // for (int i = 0; i < b.size(); i++) {
-    //     cout << b[i] << " ";
-    // }
-
-    // cout << endl;
-
-    // for (int i = 0; i < c.size(); i++) {
-    //     cout << c[i] << " ";
-    // }
 
     return 0;
 }
