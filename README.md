@@ -3,11 +3,11 @@ With growing popularity, newer puzzles contain fewer and fewer clues and more we
 
 
 ### TODO
-- [ ] Add backtracking solver
+- [x] Add backtracking solver
     + Possible exploration of different solving strategies
-    - [ ] #1
+    - [x] [#1](https://github.com/OutWrest/gendoku/issues/1)
 - [ ] Create a testing suite
-- [ ] Create modular rules
+- [x] Create modular rules
     + Rules can be added or removed each run
     + Update tests to include new rules
 - [ ] Benchmark
