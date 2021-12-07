@@ -1,6 +1,6 @@
 #include "solver/backtrack.hpp"
 
-Backtrack::Backtrack(const int num_of_solutions) : SolverBase(num_of_solutions) {
+Backtrack::Backtrack(const unsigned int num_of_solutions, const unsigned int num_of_threads = 1) : SolverBase(num_of_solutions, num_of_threads) {
     // constructor
 };
 

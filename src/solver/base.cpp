@@ -4,11 +4,13 @@
 #include "rules/base.hpp"
 
 // constructor
-SolverBase::SolverBase(const int num_of_solutions) {
+SolverBase::SolverBase(const unsigned int num_of_solutions, const unsigned int num_of_threads = 1) {
     // initialize 
     rules = vector<RuleBase*>();
     this->num_of_solutions = num_of_solutions;
     this->num_of_solutions_found = 0;
+    this->num_of_threads = num_of_threads;
+    this->num_of_threads_used = 0;
 
     rules.push_back(new RuleBase());
 }

@@ -2,6 +2,7 @@
 #include <vector>
 #include <time.h>
 #include <string.h>
+#include <thread>
 
 #include "solver/backtrack.hpp"
 #include "io/file.hpp"
@@ -25,7 +26,7 @@ void print_board(vector<vector<int>> board) {
 
 struct config
 {
-    int numToSolve = 0;
+    unsigned int numToSolve = 0;
     char* outputFilename = "output.txt";
     char* inputFilename;
     char* rulesList;
@@ -115,9 +116,11 @@ int main(int argc, char *argv[]) {
     // output file
     FileIO fileio(cfg.outputFilename);
     
+    // threads to ues
+    unsigned int num_of_threads = thread::hardware_concurrency();
 
     // create solver
-    Backtrack solver(cfg.numToSolve);
+    Backtrack solver(cfg.numToSolve, num_of_threads);
 
     // default rules
     RuleBase rb;

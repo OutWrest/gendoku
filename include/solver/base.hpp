@@ -11,11 +11,13 @@ using namespace std;
 class SolverBase {
 public:
     vector<RuleBase*> rules;
-    int num_of_solutions;
-    int num_of_solutions_found;
+    unsigned int num_of_solutions;
+    unsigned int num_of_solutions_found;
+    unsigned int num_of_threads;
+    unsigned int num_of_threads_used;
 
     // constructor
-    SolverBase(const int num_of_solutions);
+    SolverBase(const unsigned int num_of_solutions, const unsigned int num_of_threads);
 
     // destructor
     ~SolverBase();
