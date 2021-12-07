@@ -23,11 +23,24 @@ void print_board(vector<vector<int>> board) {
     printf("\n");
 }
 
+struct config
+{
+    int numToSolve = 0;
+    char* outputFilename = "output.txt";
+    char* inputFilename;
+    char* rulesList;
+};
+
 vector<vector<int>> read_board(const char* filename) {
     vector<vector<int>> board;
 
     // open file
     FILE* file = fopen(filename, "r");
+
+    if (file == NULL) {
+        printf("Error board opening file\n");
+        exit(1);
+    }
 
     // read file
     char line[256];
@@ -51,79 +64,92 @@ vector<vector<int>> read_board(const char* filename) {
     return board;
 }
 
+void read_args(int argc, char* argv[], config* cfg) {
+    // read arguments
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-n") == 0) {
+            cfg->numToSolve = atoi(argv[i + 1]);
+        } else if (strcmp(argv[i], "-o") == 0) {
+            cfg->outputFilename = argv[i + 1];
+        } else if (strcmp(argv[i], "-i") == 0) {
+            cfg->inputFilename = argv[i + 1];
+        } else if (strcmp(argv[i], "-r") == 0) {
+            cfg->rulesList = argv[i + 1];
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     // Usage ./gendoku <how many to generate> <output file> -r <k|a|ka> -b (board.txt, optional)
     // Example ./gendoku 1 output.txt -r ka -b board.txt
 
     // check if there are enough arguments
-    if (argc < 3) {
-        printf("Usage: ./gendoku <how many to generate, default = 0> <output file> -r <k|a|ka> -b <board to start with, optional>\n");
-        printf("Example: ./gendoku 1 output.txt -r ka -b board.txt\n");
+    if (argc < 2) {
+        printf("Usage: ./gendoku <how many to generate, default = 0> --o <output file, optional> --r <k|a|ka, optional> --b <board to start with, optional>\n");
+        printf("Example: ./gendoku -n 1 output.txt --r ka --b board.txt\n");
         return 0;
     }
 
-    // Parse board in txt file
-    vector<vector<int>> board;
+    // get user arguments
+    config cfg;
+    
+    read_args(argc, argv, &cfg);
 
-    if (argc > 4 && strcmp(argv[3], "-b") == 0) {
-        board = read_board(argv[4]);
+    // read board
+    vector<vector<int>> board = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
-        // check if board is valid
-        if (board.size() != 9 || board[0].size() != 9) {
-            printf("Board is not valid\n");
-            return 0;
-        }
-
-        printf("Loaded board:\n");
-        print_board(board);
-    }
-    else {
-        board = {
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
+    if (cfg.inputFilename != NULL) {
+        board = read_board(cfg.inputFilename);
     }
 
-    // create a new solver
-    FileIO fileio(argv[2]);
+    // output file
+    FileIO fileio(cfg.outputFilename);
+    
 
-    time_t start = time(0);
-    Backtrack solver(atoi(argv[1]));
+    // create solver
+    Backtrack solver(cfg.numToSolve);
 
-    // split the rules
-    if (argc > 4 && strcmp(argv[4], "-r") == 0) {
-        if (strcmp(argv[5], "k") == 0) {
-            KnightRule kr;
+    // default rules
+    RuleBase rb;
+    solver.add_rule(rb);
 
-            solver.add_rule(kr);
-        }
-        else if (strcmp(argv[5], "a") == 0) {
-            AdjacentRule ar;
+    // for character in rules list
+    if (cfg.rulesList != NULL) {
+        for (int i = 0; i < strlen(cfg.rulesList); i++) {
+            char c = cfg.rulesList[i];
 
-            solver.add_rule(ar);
-        }
-        else if (strcmp(argv[5], "ka") == 0) {
-            KnightRule kr;
-            AdjacentRule ar;
-
-            solver.add_rule(kr);
-            solver.add_rule(ar);
+            // if character is k
+            if (c == 'k') {
+                KnightRule kr;
+                solver.add_rule(kr);
+            } else if (c == 'a') {
+                AdjacentRule ar;
+                solver.add_rule(ar);
+            }
         }
     }
+
+    printf("Started solving for %d boards...\n", cfg.numToSolve);
+
+    time_t start = clock();
 
     // solve the puzzle
     solver.solve(board, &fileio);
 
-    double time_taken = difftime(time(0), start);
+    float time_taken = (clock () - start) /  CLOCKS_PER_SEC;
 
-    printf("%d solutions found in %f seconds.\n", solver.get_num_of_solutions(), time_taken);
+    printf("%d solutions found in %.2f seconds.\n", solver.get_num_of_solutions(), time_taken);
 
     return 0;
 }
+
