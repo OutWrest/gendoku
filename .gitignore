@@ -42,3 +42,5 @@ CMakeFiles/
 
 # bin
 genodoku
+output.txt
+board.txt

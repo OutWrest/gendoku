@@ -1,6 +1,6 @@
 #include "solver/backtrack.hpp"
 
-Backtrack::Backtrack(const int num_of_solutions) : SolverBase(num_of_solutions) {
+Backtrack::Backtrack(const unsigned int num_of_solutions, const unsigned int num_of_threads = 1) : SolverBase(num_of_solutions, num_of_threads) {
     // constructor
 };
 
@@ -8,7 +8,7 @@ void Backtrack::solve(vector<vector<int>> board, FileIO* fileio) {
     // check if the board is solved
     if (this->is_solved(board)) {
         this->num_of_solutions_found++;
-        fileio->write(board);
+        fileio->write(this->num_of_solutions_found - 1, board);
         return;
     }
 
@@ -31,7 +31,7 @@ void Backtrack::solve(vector<vector<int>> board, FileIO* fileio) {
                     // if solved, then call the fileio callback
                     if (this->is_solved(board)) {
                         this->num_of_solutions_found++;
-                        fileio->write(board);
+                        fileio->write(this->num_of_solutions_found - 1, board);
 
                         if (this->num_of_solutions <= this->num_of_solutions_found && this->num_of_solutions != 0) {
                             return;

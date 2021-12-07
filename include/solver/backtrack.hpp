@@ -9,7 +9,7 @@ using namespace std;
 class Backtrack : public SolverBase  {
 public:
     // constructor, use parent
-    Backtrack(const int num_of_solutions);
+    Backtrack(const unsigned int num_of_solutions, const unsigned int num_of_threads);
 
     // solver
     void solve(vector<vector<int>> board, FileIO* fileio) override;

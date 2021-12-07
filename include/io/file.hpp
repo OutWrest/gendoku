@@ -19,7 +19,7 @@ public:
     // bool read(vector<vector<int>>& data);
 
     // write file
-    void write(const vector<vector<int>> board);
+    void write(const int i, const vector<vector<int>> board);
 private:
     FILE* file;
     const char* filename;
